@@ -3,29 +3,25 @@ import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
 const PostSchema = new Schema({
-  id: {
-    type: mongoose.Schema.Types.ObjectId
-  },
   title: {
     type: String,
-    required: true
+    require: true
   },
   body: {
     type: String,
-    required: true
+    require: true
   },
   published: {
     type: Boolean,
-    required: true
+    require: true
   },
   author: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
-    required: true
+    type: Schema.Types.ObjectId,
+    ref: "User"
   },
   comments: [
     {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: "Comment"
     }
   ]
