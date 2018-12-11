@@ -1,6 +1,6 @@
 export default `
   type User {
-    id: ID!
+    id: String!
     name: String!
     email: String!
     age: Int
@@ -15,8 +15,8 @@ export default `
 
   type Mutation {
     createUser(user: CreateUserInput): User!
-    updateUser(id: ID!, user: UpdateUserInput!): User!
-    deleteUser(id: ID!): User!
+    updateUser(id: String!, user: UpdateUserInput!): User!
+    deleteUser(id: String!): User!
   }
 
   input CreateUserInput {

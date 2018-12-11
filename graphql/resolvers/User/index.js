@@ -1,29 +1,30 @@
-import uuid from "uuid";
+import mongoose from "mongoose";
 
 import User from "../../../server/models/User";
 
+const { ObjectId } = mongoose.Types;
+
 export default {
   Query: {
-    me: async (parent, { id }, context, info) => {
-      return new Promise((resolve, reject) => {
-        User.findOne(id).exec((err, res) => {
-          err ? reject(err) : resolve(res);
-        });
-      });
+    me: async (root, { id: _id }, context, info) => {
+      return await User.findOne({ _id }).exec();
     },
-    users: async (parent, args, context, info) => {
-      return new Promise((resolve, reject) => {
-        User.find({})
-          .populate()
-          .exec((err, res) => {
-            err ? reject(err) : resolve(res);
-          });
-      });
+    users: async (root, args, context, info) => {
+      const res = await User.find({})
+        .populate()
+        .exec();
+
+      return res.map(u => ({
+        id: u._id.toString(),
+        email: u.email,
+        password: u.password,
+        other: u.other
+      }));
     }
   },
   Mutation: {
     createUser: async (parent, { user }, context, info) => {
-      const newUser = new User({ id: uuid(), ...user });
+      const newUser = await new User({ id: _id.toString(), ...user });
 
       return new Promise((resolve, reject) => {
         newUser.save((err, res) => {
