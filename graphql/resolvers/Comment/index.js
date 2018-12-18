@@ -67,8 +67,9 @@ export default {
         .exec();
     },
     post: async ({ post }, args, context, info) => {
-      const res = await Post.find({ _id: post });
-      console.log("É isso aqui lerdo: ", res);
+      return await Post.find({ _id: post._id })
+        .populate()
+        .exec();
     }
   }
 };

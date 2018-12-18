@@ -68,8 +68,9 @@ export default {
         .exec();
     },
     comments: async ({ author }, args, context, info) => {
-      const res = await Comment.find({ _id: author });
-      console.log("É isso aqui lerdo: ", res);
+      return await Comment.find({ _id: author })
+        .populate()
+        .exec();
     }
   }
 };
