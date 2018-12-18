@@ -5,7 +5,6 @@
   <a href="https://github.com/leonardomso/graphql-mongodb-server"><img src="https://i.imgur.com/oqzv1MX.png" alt="GraphQL MongoDB" width=128"></a>
 <br>
 <br>
-GraphQL MongoDB
 
 <p align="center">GraphQL MongoDB server. </p>
 
