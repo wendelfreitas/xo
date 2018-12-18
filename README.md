@@ -28,8 +28,7 @@ This is a blog project using Apollo, GraphQL and MongoDB. Support for subscripti
 1. Clone this repo using `https://github.com/leonardomso/xo.git`
 2. Move to the appropriate directory: `cd xo`.<br />
 3. Run `yarn` or `npm install` to install dependencies.<br />
-4. Set `.env` file with your mongoURI setting this up, and your ready to go.
-5. Run `npm start` to see the example app at `http://localhost:4000/playground`.
+4. Run `npm start` to see the example app at `http://localhost:4000/playground`.
 
 ## Commands
 
