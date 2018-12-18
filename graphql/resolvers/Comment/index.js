@@ -1,12 +1,32 @@
-import uuid from "uuid";
-
+import User from "../../../server/models/User";
+import Post from "../../../server/models/Post";
 import Comment from "../../../server/models/Comment";
 
 export default {
-  Query: {},
+  Query: {
+    comment: async (root, { _id }, context, info) => {
+      return await Comment.findOne({ _id }).exec();
+    },
+    comments: async (root, args, context, info) => {
+      const res = await Comment.find({})
+        .populate()
+        .exec();
+
+      return res.map(u => ({
+        _id: u._id.toString(),
+        text: u.text,
+        author: u.author,
+        post: u.post
+      }));
+    }
+  },
   Mutation: {
     createComment: async (parent, { comment }, context, info) => {
-      const newComment = new Comment({ id: uuid(), ...comment });
+      const newComment = await new Comment({
+        text: comment.text,
+        author: comment.author,
+        post: comment.post
+      });
 
       return new Promise((resolve, reject) => {
         newComment.save((err, res) => {
@@ -14,10 +34,10 @@ export default {
         });
       });
     },
-    updateComment: async (parent, { id, comment }, context, info) => {
+    updateComment: async (parent, { _id, comment }, context, info) => {
       return new Promise((resolve, reject) => {
         Comment.findByIdAndUpdate(
-          id,
+          _id,
           { $set: { ...comment } },
           { new: true }
         ).exec((err, res) => {
@@ -25,9 +45,9 @@ export default {
         });
       });
     },
-    deleteComment: async (parent, { id }, context, info) => {
+    deleteComment: async (parent, { _id }, context, info) => {
       return new Promise((resolve, reject) => {
-        Comment.findByIdAndDelete(id).exec((err, res) => {
+        Comment.findByIdAndDelete(_id).exec((err, res) => {
           err ? reject(err) : resolve(res);
         });
       });
@@ -38,6 +58,17 @@ export default {
       subscribe: (parent, args, { pubsub }) => {
         //return pubsub.asyncIterator(channel)
       }
+    }
+  },
+  Comment: {
+    author: async ({ author }, args, context, info) => {
+      return await User.find({ _id: author })
+        .populate()
+        .exec();
+    },
+    post: async ({ post }, args, context, info) => {
+      const res = await Post.find({ _id: post });
+      console.log("É isso aqui lerdo: ", res);
     }
   }
 };

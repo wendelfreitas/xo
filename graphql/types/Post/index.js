@@ -1,6 +1,6 @@
 export default `
   type Post {
-    id: ID!
+    _id: ID!
     title: String!
     body: String!
     published: Boolean!
@@ -9,14 +9,14 @@ export default `
   }
 
   type Query {
-    post: Post!
+    post(_id: ID!): Post!
     posts: [Post!]!
   }
 
   type Mutation {
     createPost(post: CreatePostInput): Post!
-    updatePost(id: ID!, post: UpdatePostInput): Post!
-    deletePost(id: ID!): Post!
+    updatePost(_id: ID!, post: UpdatePostInput): Post!
+    deletePost(_id: ID!): Post!
   }
 
   type Subscription {

@@ -1,19 +1,20 @@
 export default `
   type Comment {
-    id: ID!
+    _id: ID!
     text: String!
     author: User!
     post: Post!
   }
 
   type Query {
+    comment(_id: ID!): [Comment!]!
     comments: [Comment!]!
   }
 
   type Mutation {
-    createComment(comment: CreateCommentInput): Comment!
-    updateComment(id: ID!, comment: UpdateCommentInput): Comment!
-    deleteComment(id: ID!): Comment!
+    createComment(comment: CreateCommentInput!): Comment!
+    updateComment(_id: ID!, comment: UpdateCommentInput): Comment!
+    deleteComment(_id: ID!): Comment!
   }
 
   type Subscription {
@@ -27,8 +28,8 @@ export default `
 
   input CreateCommentInput {
     text: String!
-    author: ID!
     post: ID!
+    author: ID!
   }
   
   input UpdateCommentInput {

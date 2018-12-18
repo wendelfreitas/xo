@@ -1,19 +1,24 @@
 import mongoose from "mongoose";
+import { ObjectID } from "mongodb";
 
 const Schema = mongoose.Schema;
+
+ObjectID.prototype.valueOf = function() {
+  return this.toString();
+};
 
 const PostSchema = new Schema({
   title: {
     type: String,
-    require: true
+    required: true
   },
   body: {
     type: String,
-    require: true
+    required: true
   },
   published: {
     type: Boolean,
-    require: true
+    required: true
   },
   author: {
     type: Schema.Types.ObjectId,

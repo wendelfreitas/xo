@@ -1,12 +1,35 @@
-import uuid from "uuid";
-
+import User from "../../../server/models/User";
 import Post from "../../../server/models/Post";
+import Comment from "../../../server/models/Comment";
 
 export default {
-  Query: {},
+  Query: {
+    post: async (root, { _id }, context, info) => {
+      return await Post.findOne({ _id }).exec();
+    },
+    posts: async (root, args, context, info) => {
+      const res = await Post.find({})
+        .populate()
+        .exec();
+
+      return res.map(u => ({
+        _id: u._id.toString(),
+        title: u.title,
+        body: u.body,
+        published: u.published,
+        author: u.author,
+        comments: u.comments
+      }));
+    }
+  },
   Mutation: {
-    createPost: (parent, { post }, context, info) => {
-      const newPost = new Post({ id: uuid(), ...post });
+    createPost: async (parent, { post }, context, info) => {
+      const newPost = await new Post({
+        title: post.title,
+        body: post.body,
+        published: post.published,
+        author: post.author
+      });
 
       return new Promise((resolve, reject) => {
         newPost.save((err, res) => {
@@ -14,18 +37,18 @@ export default {
         });
       });
     },
-    updatePost: (parent, { id, post }, context, info) => {
+    updatePost: async (parent, { _id, post }, context, info) => {
       return new Promise((resolve, reject) => {
-        Post.findByIdAndUpdate(id, { $set: { ...post } }, { new: true }).exec(
+        Post.findByIdAndUpdate(_id, { $set: { ...post } }, { new: true }).exec(
           (err, res) => {
             err ? reject(err) : resolve(res);
           }
         );
       });
     },
-    deletePost: (parent, { id }, context, info) => {
+    deletePost: (parent, { _id }, context, info) => {
       return new Promise((resolve, reject) => {
-        Post.findByIdAndDelete(id).exec((err, res) => {
+        Post.findByIdAndDelete(_id).exec((err, res) => {
           err ? reject(err) : resolve(res);
         });
       });
@@ -36,6 +59,17 @@ export default {
       subscribe: (parent, args, { pubsub }) => {
         //return pubsub.asyncIterator(channel)
       }
+    }
+  },
+  Post: {
+    author: async ({ author }, args, context, info) => {
+      return await User.find({ _id: author })
+        .populate()
+        .exec();
+    },
+    comments: async ({ author }, args, context, info) => {
+      const res = await Comment.find({ _id: author });
+      console.log("É isso aqui lerdo: ", res);
     }
   }
 };
