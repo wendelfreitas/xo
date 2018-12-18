@@ -6,7 +6,7 @@
 XO
 </h1>
 
-<p align="center">A blog using Apollo, GraphQL and MongoDB </p>
+<p align="center">A blog API made with GraphQL and MongoDB.</p>
 
 <p align="center">
   <a href="http://makeapullrequest.com">
@@ -21,7 +21,7 @@ XO
 
 ## Introduction
 
-This is a blog project using Apollo, GraphQL and MongoDB. Support for subscriptions using GraphQL Yoga, modularized schema, etc. All you need to do is clone, install and you're ready to start.
+This is a blog API made with GraphQL and MongoDB. Support for subscriptions using GraphQL Yoga, modularized schema, etc. All you need to do is clone, install and you're ready to start.
 
 ## Getting started
 
