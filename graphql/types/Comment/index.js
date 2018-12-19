@@ -7,7 +7,7 @@ export default `
   }
 
   type Query {
-    comment(_id: ID!): [Comment!]!
+    comment(_id: ID!): Comment!
     comments: [Comment!]!
   }
 

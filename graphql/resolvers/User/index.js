@@ -4,22 +4,17 @@ import Comment from "../../../server/models/Comment";
 
 export default {
   Query: {
-    user: async (root, { _id }, context, info) => {
-      return await User.findOne({ _id }).exec();
-    },
-    users: async (root, args, context, info) => {
-      const users = await User.find({})
+    user: async (parent, { _id }, context, info) => {
+      return await User.findById(_id)
         .populate()
-        .exec();
-
-      return users.map(u => ({
-        _id: u._id.toString(),
-        name: u.name,
-        email: u.email,
-        age: u.age,
-        posts: u.posts,
-        comments: u.comments
-      }));
+        .then(user => user)
+        .catch(err => err);
+    },
+    users: async (parent, args, context, info) => {
+      return await User.find()
+        .populate()
+        .then(users => users)
+        .catch(err => err);
     }
   },
   Mutation: {
@@ -55,14 +50,10 @@ export default {
   },
   User: {
     posts: async ({ _id }, args, context, info) => {
-      return await Post.find({ author: _id })
-        .populate()
-        .exec();
+      return await Post.find({ author: _id });
     },
     comments: async ({ _id }, args, context, info) => {
-      return await Comment.find({ author: _id })
-        .populate()
-        .exec();
+      return await Comment.find({ author: _id });
     }
   }
 };
