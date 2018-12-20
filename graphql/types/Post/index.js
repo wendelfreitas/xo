@@ -15,8 +15,8 @@ export default `
 
   type Mutation {
     createPost(post: CreatePostInput): Post!
-    updatePost(_id: ID!, post: UpdatePostInput): Post!
-    deletePost(_id: ID!): Post!
+    updatePost(_id: ID!, author: ID!, post: UpdatePostInput): Post
+    deletePost(_id: ID!, author: ID!): Post
   }
 
   type Subscription {

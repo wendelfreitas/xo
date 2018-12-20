@@ -13,8 +13,8 @@ export default `
 
   type Mutation {
     createComment(comment: CreateCommentInput!): Comment!
-    updateComment(_id: ID!, comment: UpdateCommentInput): Comment!
-    deleteComment(_id: ID!): Comment!
+    updateComment(_id: ID!, author: ID!, comment: UpdateCommentInput): Comment
+    deleteComment(_id: ID!, author: ID!): Comment
   }
 
   type Subscription {

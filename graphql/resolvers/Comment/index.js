@@ -31,23 +31,24 @@ export default {
         });
       });
     },
-    updateComment: async (parent, { _id, comment }, context, info) => {
-      return new Promise((resolve, reject) => {
-        Comment.findByIdAndUpdate(
+    updateComment: async (parent, { _id, author, comment }, context, info) => {
+      const newComment = await Comment.findById(_id).exec();
+
+      if (newComment.author == author) {
+        return Comment.findOneAndUpdate(
           _id,
           { $set: { ...comment } },
           { new: true }
-        ).exec((err, res) => {
-          err ? reject(err) : resolve(res);
-        });
-      });
+        ).exec();
+      }
     },
-    deleteComment: async (parent, { _id }, context, info) => {
-      return new Promise((resolve, reject) => {
-        Comment.findByIdAndDelete(_id).exec((err, res) => {
-          err ? reject(err) : resolve(res);
-        });
-      });
+    deleteComment: async (parent, { _id, author }, context, info) => {
+      return await Comment.findById(_id)
+        .then(comment => {
+          if (comment.author == author)
+            return Comment.findOneAndDelete({ _id });
+        })
+        .catch(err => err);
     }
   },
   Subscription: {

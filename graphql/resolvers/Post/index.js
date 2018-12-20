@@ -32,21 +32,23 @@ export default {
         });
       });
     },
-    updatePost: async (parent, { _id, post }, context, info) => {
-      return new Promise((resolve, reject) => {
-        Post.findByIdAndUpdate(_id, { $set: { ...post } }, { new: true }).exec(
-          (err, res) => {
-            err ? reject(err) : resolve(res);
-          }
-        );
-      });
+    updatePost: async (parent, { _id, author, post }, context, info) => {
+      const newPost = await Post.findById(_id).exec();
+
+      if (newPost.author == author) {
+        return Post.findOneAndUpdate(
+          _id,
+          { $set: { ...post } },
+          { new: true }
+        ).exec();
+      }
     },
-    deletePost: (parent, { _id }, context, info) => {
-      return new Promise((resolve, reject) => {
-        Post.findByIdAndDelete(_id).exec((err, res) => {
-          err ? reject(err) : resolve(res);
-        });
-      });
+    deletePost: async (parent, { _id, author }, context, info) => {
+      return await Post.findById(_id)
+        .then(post => {
+          if (post.author == author) return Post.findOneAndDelete({ _id });
+        })
+        .catch(err => err);
     }
   },
   Subscription: {
